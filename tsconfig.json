@@ -4,16 +4,18 @@
     "noFallthroughCasesInSwitch": true,
     "noUnusedParameters": true,
     "noImplicitReturns": true,
-    "moduleResolution": "node",
+    // "moduleResolution": "node",
     "esModuleInterop": true,
     "noUnusedLocals": true,
     "noImplicitAny": true,
-    "declarationDir": "lib/types",
+    // "declarationDir": "lib/types",
+    "outDir": "./dist",
     "declaration": true,
     "target": "esnext",
     "module": "esnext",
-    "strict": true
+    "strict": true,
+    "sourceMap": false,
   },
   "include": ["src/**/*"],
-  "exclude": ["node_modules", "lib"]
+  "exclude": ["node_modules", "dist"]
 }
