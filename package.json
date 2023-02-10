@@ -2,25 +2,32 @@
   "name": "px2rem2js",
   "version": "1.0.0",
   "description": "Init rem setting ,support rem transformer fuction",
-  "main": "./dist/index.js",
-  "module": "./dist/index.js",
-  "scripts": {
-    "build:dev": "cross-env NODE_ENV=development rollup -c",
-    "build": "cross-env NODE_ENV=production rollup -c",
-    "lint": "eslint ."
+  "keywords": [],
+  "homepage": "https://github.com/GisonL/px2rem2js#readme",
+  "bugs": {
+    "url": "https://github.com/GisonL/px2rem2js/issues"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/GisonL/px2rem2js.git"
   },
-  "types": "./dist/index.d.ts",
-  "keywords": [],
-  "author": "",
   "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/GisonL/px2rem2js/issues"
+  "author": "",
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "cross-env NODE_ENV=production rollup -c",
+    "build:dev": "cross-env NODE_ENV=development rollup -c",
+    "lint": "eslint .",
+    "prepare": "npm run build"
   },
-  "homepage": "https://github.com/GisonL/px2rem2js#readme",
+  "dependencies": {
+    "lodash": "^4.17.21"
+  },
   "devDependencies": {
     "@babel/core": "^7.20.12",
     "@babel/plugin-transform-runtime": "^7.19.6",
@@ -44,8 +51,5 @@
     "rollup": "^3.15.0",
     "rollup-plugin-dts": "^5.1.1",
     "typescript": "^4.9.5"
-  },
-  "dependencies": {
-    "lodash": "^4.17.21"
   }
 }
