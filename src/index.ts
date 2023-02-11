@@ -1,5 +1,5 @@
 import { BASE_FONT_SIZE, DESIGN_WIDTH } from './constans';
-import { debounce } from 'lodash';
+import { debounce } from 'lodash-es';
 
 interface ClassPropsType {
   baseFontSize: number;
