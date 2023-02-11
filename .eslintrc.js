@@ -5,7 +5,10 @@ module.exports = {
     jest: true,
     node: true,
   },
-  extends: ['plugin:@typescript-eslint/recommended','plugin:prettier/recommended'],
+  extends: [
+    'plugin:@typescript-eslint/recommended',
+    'plugin:prettier/recommended',
+  ],
   parser: '@typescript-eslint/parser',
   parserOptions: {
     ecmaVersion: 'latest',
@@ -19,5 +22,6 @@ module.exports = {
     '@typescript-eslint/no-unused-vars': 'off',
     '@typescript-eslint/no-explicit-any': 'off',
     eqeqeq: 'error',
+    '@typescript-eslint/no-inferrable-types': 'off',
   },
 };
