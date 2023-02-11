@@ -1,21 +1,13 @@
 {
-  "compilerOptions": {
-    "allowSyntheticDefaultImports": true,
-    "noFallthroughCasesInSwitch": true,
-    "noUnusedParameters": true,
-    "noImplicitReturns": true,
-    // "moduleResolution": "node",
-    "esModuleInterop": true,
-    "noUnusedLocals": true,
-    "noImplicitAny": true,
-    // "declarationDir": "lib/types",
-    "outDir": "./dist",
-    "declaration": true,
-    "target": "esnext",
-    "module": "esnext",
-    "strict": true,
-    "sourceMap": false,
-  },
-  "include": ["src/**/*"],
-  "exclude": ["node_modules", "dist"]
+  // "compilerOptions": {
+  //   // "target": "es6",
+  //   // "lib": ["dom", "esnext"],
+  //   // "declaration": true,
+  //   // "strict": true,
+  //   // "declarationDir": "dist",
+  //   // "module": "esnext",
+  //   // "moduleResolution": "node"
+  // },
+  "include": ["src"],
+  "exclude": ["node_modules", "dist", "example"]
 }

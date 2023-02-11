@@ -3,4 +3,5 @@
 .github/
 dist/
 node_modules/
-.eslintrc.cjs
+example/
+.eslintrc.js

@@ -1,4 +1,12 @@
 {
-  "presets": [["@babel/env", { "modules": false }], "@babel/typescript"],
+  "presets": [
+    [
+      "@babel/env",
+      {
+        "modules": false
+      }
+    ],
+    "@babel/typescript"
+  ],
   "exclude": "node_modules/**"
 }
