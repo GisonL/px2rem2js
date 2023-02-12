@@ -1,15 +1,30 @@
 interface ClassPropsType {
-    baseFontSize: number;
-    designWidth: number;
-    context: any;
+    baseFontSize?: number;
+    designWidth?: number;
+    context?: any;
+    suffix?: boolean;
+}
+interface GetRemOptions {
+    suffix?: boolean;
+}
+declare const enum EvenTypes {
+    'RESIZE' = "RESIZE"
 }
 declare class PX2REM2JS {
     BASE_FONT_SIZE: number;
     DESIGN_WIDTH: number;
     WINDOW_CONTEXT: any;
-    constructor(props: ClassPropsType);
-    getRemFromPx: (px?: number | undefined, isInit?: boolean) => number;
+    SUFFIX: boolean;
+    EVENS: {
+        [key in EvenTypes]: Function[];
+    };
+    private UNIT;
+    constructor(props?: ClassPropsType);
+    on: (type: EvenTypes, cb: Function) => void;
+    private emit;
+    _compute: (px?: number | undefined, isInit?: boolean) => number;
+    getRem: (px?: number | undefined, options?: GetRemOptions) => string;
     initRem: () => void;
 }
 
-export { PX2REM2JS as default };
+export { EvenTypes, PX2REM2JS as default };

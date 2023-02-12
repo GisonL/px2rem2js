@@ -1,8 +1,8 @@
 (function (global, factory) {
-  typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory() :
-  typeof define === 'function' && define.amd ? define(factory) :
-  (global = typeof globalThis !== 'undefined' ? globalThis : global || self, global.px2rem2js = factory());
-})(this, (function () { 'use strict';
+  typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports) :
+  typeof define === 'function' && define.amd ? define(['exports'], factory) :
+  (global = typeof globalThis !== 'undefined' ? globalThis : global || self, factory(global.px2rem2js = {}));
+})(this, (function (exports) { 'use strict';
 
   function _classCallCheck(instance, Constructor) {
     if (!(instance instanceof Constructor)) {
@@ -547,27 +547,50 @@
     return debounced;
   }
 
+  exports.EvenTypes = void 0;
+  (function (EvenTypes) {
+    EvenTypes["RESIZE"] = "RESIZE";
+  })(exports.EvenTypes || (exports.EvenTypes = {}));
   var PX2REM2JS = /*#__PURE__*/_createClass(function PX2REM2JS(props) {
     var _this = this;
     _classCallCheck(this, PX2REM2JS);
     _defineProperty(this, "BASE_FONT_SIZE", BASE_FONT_SIZE);
     _defineProperty(this, "DESIGN_WIDTH", DESIGN_WIDTH);
     _defineProperty(this, "WINDOW_CONTEXT", window);
-    _defineProperty(this, "getRemFromPx", function () {
+    _defineProperty(this, "SUFFIX", true);
+    _defineProperty(this, "EVENS", _defineProperty({}, exports.EvenTypes.RESIZE, []));
+    _defineProperty(this, "UNIT", 'rem');
+    _defineProperty(this, "on", function (type, cb) {
+      _this.EVENS[type].push(cb);
+    });
+    _defineProperty(this, "emit", function (type) {
+      if (_this.EVENS[type].length >= 1) {
+        _this.EVENS[type].forEach(function (fn) {
+          fn();
+        });
+      }
+    });
+    _defineProperty(this, "_compute", function () {
       var px = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : _this.BASE_FONT_SIZE;
       var isInit = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
       var scale = document.documentElement.clientWidth / _this.DESIGN_WIDTH;
-      var size = isInit ? _this.BASE_FONT_SIZE + 'px' : document.documentElement.style.fontSize || _this.BASE_FONT_SIZE + 'px';
+      // 初始化(重新计算根元素大小)时，总是取在设计稿宽度下的基准值*比例
+      var size = isInit ? _this.BASE_FONT_SIZE + 'px' : _this.BASE_FONT_SIZE * scale + 'px';
       size = Number(size.replace('px', ''));
-      return px / size * scale;
+      return Number((px / size * scale).toFixed(2));
+    });
+    _defineProperty(this, "getRem", function () {
+      var px = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : _this.BASE_FONT_SIZE;
+      var options = arguments.length > 1 ? arguments[1] : undefined;
+      var unit = _this.UNIT;
+      if (options && !options.suffix) unit = '';
+      return _this._compute(px) + unit;
     });
     _defineProperty(this, "initRem", function () {
       var _this$WINDOW_CONTEXT, _this$WINDOW_CONTEXT2;
       var resizeEvt = 'orientationchange' in _this.WINDOW_CONTEXT ? 'orientationchange' : 'resize';
       var docEl = document.documentElement;
-
-      //根据设计稿设置HTML字体大小
-      var recalc = debounce(function () {
+      var initFontSize = function initFontSize() {
         var clientWidth = docEl.clientWidth;
         if (!clientWidth) {
           return;
@@ -576,32 +599,37 @@
         if (clientWidth >= _this.DESIGN_WIDTH) {
           docEl.style.fontSize = "".concat(_this.BASE_FONT_SIZE, "px");
         } else {
-          docEl.style.fontSize = "".concat(_this.getRemFromPx(undefined, true) * _this.BASE_FONT_SIZE, "px");
+          // rem * BASE_FONT_SIZE，方便使用
+          docEl.style.fontSize = "".concat(_this._compute(undefined, true) * _this.BASE_FONT_SIZE, "px");
         }
-      }, 100);
-      recalc();
+        _this.emit(exports.EvenTypes.RESIZE);
+      };
+      //根据设计稿设置HTML字体大小
+      var recalc = debounce(initFontSize, 100);
+      initFontSize();
       // document?.addEventListener('DOMContentLoaded', recalc, false);
       (_this$WINDOW_CONTEXT = _this.WINDOW_CONTEXT) === null || _this$WINDOW_CONTEXT === void 0 ? void 0 : _this$WINDOW_CONTEXT.addEventListener(resizeEvt, recalc, false);
       //页面显示时计算一次
       (_this$WINDOW_CONTEXT2 = _this.WINDOW_CONTEXT) === null || _this$WINDOW_CONTEXT2 === void 0 ? void 0 : _this$WINDOW_CONTEXT2.addEventListener('pageshow', function (e) {
         if (e.persisted) {
-          recalc();
+          initFontSize();
         }
       }, false);
     });
     if (!props) return;
-    this.BASE_FONT_SIZE = props.baseFontSize || BASE_FONT_SIZE;
-    this.DESIGN_WIDTH = props.designWidth || DESIGN_WIDTH;
     if (props.context && Object.prototype.toString.call(props.context) === '[object Object]') {
       this.WINDOW_CONTEXT = props.context;
     } else {
       console.error('The context must be a [object Object]');
     }
-  }
+    this.BASE_FONT_SIZE = props.baseFontSize || BASE_FONT_SIZE;
+    this.DESIGN_WIDTH = props.designWidth || DESIGN_WIDTH;
+    this.SUFFIX = props.suffix || true;
+    if (!!this.SUFFIX) this.UNIT = '';
+  });
 
-  // 通过px获取rem大小
-  );
+  exports.default = PX2REM2JS;
 
-  return PX2REM2JS;
+  Object.defineProperty(exports, '__esModule', { value: true });
 
 }));

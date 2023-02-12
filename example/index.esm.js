@@ -541,11 +541,10 @@ function debounce(func, wait, options) {
   return debounced;
 }
 
-/**
- * TODO:
- * 1. 当前页跳转第三方时，会保留rem处理事件，可能造成不可预测的后果。考虑返回或提供一个事件卸载方法
- * 2. 跳转第三方再返回业务页面后，应该支持开发者重新挂载事件，涉及多实例还是单实例模式的选择，可能会采用全局变量缓存方案
- */
+var EvenTypes;
+(function (EvenTypes) {
+  EvenTypes["RESIZE"] = "RESIZE";
+})(EvenTypes || (EvenTypes = {}));
 var PX2REM2JS = /*#__PURE__*/_createClass(function PX2REM2JS(props) {
   var _this = this;
   _classCallCheck(this, PX2REM2JS);
@@ -553,13 +552,26 @@ var PX2REM2JS = /*#__PURE__*/_createClass(function PX2REM2JS(props) {
   _defineProperty(this, "DESIGN_WIDTH", DESIGN_WIDTH);
   _defineProperty(this, "WINDOW_CONTEXT", window);
   _defineProperty(this, "SUFFIX", true);
+  _defineProperty(this, "EVENS", _defineProperty({}, EvenTypes.RESIZE, []));
   _defineProperty(this, "UNIT", 'rem');
+  _defineProperty(this, "on", function (type, cb) {
+    _this.EVENS[type].push(cb);
+  });
+  _defineProperty(this, "emit", function (type) {
+    if (_this.EVENS[type].length >= 1) {
+      _this.EVENS[type].forEach(function (fn) {
+        fn();
+      });
+    }
+  });
   _defineProperty(this, "_compute", function () {
     var px = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : _this.BASE_FONT_SIZE;
+    var isInit = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
     var scale = document.documentElement.clientWidth / _this.DESIGN_WIDTH;
-    var size = document.documentElement.style.fontSize || _this.BASE_FONT_SIZE + 'px';
+    // 初始化(重新计算根元素大小)时，总是取在设计稿宽度下的基准值*比例
+    var size = isInit ? _this.BASE_FONT_SIZE + 'px' : _this.BASE_FONT_SIZE * scale + 'px';
     size = Number(size.replace('px', ''));
-    return px / size * scale;
+    return Number((px / size * scale).toFixed(2));
   });
   _defineProperty(this, "getRem", function () {
     var px = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : _this.BASE_FONT_SIZE;
@@ -581,8 +593,10 @@ var PX2REM2JS = /*#__PURE__*/_createClass(function PX2REM2JS(props) {
       if (clientWidth >= _this.DESIGN_WIDTH) {
         docEl.style.fontSize = "".concat(_this.BASE_FONT_SIZE, "px");
       } else {
-        docEl.style.fontSize = "".concat(_this._compute(undefined) * _this.BASE_FONT_SIZE, "px");
+        // rem * BASE_FONT_SIZE，方便使用
+        docEl.style.fontSize = "".concat(_this._compute(undefined, true) * _this.BASE_FONT_SIZE, "px");
       }
+      _this.emit(EvenTypes.RESIZE);
     };
     //根据设计稿设置HTML字体大小
     var recalc = debounce(initFontSize, 100);
@@ -606,9 +620,6 @@ var PX2REM2JS = /*#__PURE__*/_createClass(function PX2REM2JS(props) {
   this.DESIGN_WIDTH = props.designWidth || DESIGN_WIDTH;
   this.SUFFIX = props.suffix || true;
   if (!!this.SUFFIX) this.UNIT = '';
-}
+});
 
-// compute rem
-);
-
-export { PX2REM2JS as default };
+export { EvenTypes, PX2REM2JS as default };

@@ -12,17 +12,18 @@ interface GetRemOptions {
   suffix?: boolean;
 }
 
-/**
- * TODO:
- * 1. 当前页跳转第三方时，会保留rem处理事件，可能造成不可预测的后果。考虑返回或提供一个事件卸载方法
- * 2. 跳转第三方再返回业务页面后，应该支持开发者重新挂载事件，涉及多实例还是单实例模式的选择，可能会采用全局变量缓存方案
- */
+export const enum EvenTypes {
+  'RESIZE' = 'RESIZE',
+}
 
 class PX2REM2JS {
   BASE_FONT_SIZE: number = BASE_FONT_SIZE;
   DESIGN_WIDTH: number = DESIGN_WIDTH;
   WINDOW_CONTEXT: any = window;
   SUFFIX: boolean = true;
+  EVENS: { [key in EvenTypes]: Function[] } = {
+    [EvenTypes.RESIZE]: [],
+  };
   private UNIT = 'rem';
 
   constructor(props?: ClassPropsType) {
@@ -41,13 +42,30 @@ class PX2REM2JS {
     if (!!this.SUFFIX) this.UNIT = '';
   }
 
+  on = (type: EvenTypes, cb: Function) => {
+    this.EVENS[type].push(cb);
+  };
+
+  private emit = (type: EvenTypes) => {
+    if (this.EVENS[type].length >= 1) {
+      this.EVENS[type].forEach((fn) => {
+        fn();
+      });
+    }
+  };
+
   // compute rem
-  _compute = (px: number | undefined = this.BASE_FONT_SIZE): number => {
+  _compute = (
+    px: number | undefined = this.BASE_FONT_SIZE,
+    isInit: boolean = false,
+  ): number => {
     const scale = document.documentElement.clientWidth / this.DESIGN_WIDTH;
-    let size: string | number =
-      document.documentElement.style.fontSize || this.BASE_FONT_SIZE + 'px';
+    // 初始化(重新计算根元素大小)时，总是取在设计稿宽度下的基准值*比例
+    let size: string | number = isInit
+      ? this.BASE_FONT_SIZE + 'px'
+      : this.BASE_FONT_SIZE * scale + 'px';
     size = Number(size.replace('px', ''));
-    return (px / size) * scale;
+    return Number(((px / size) * scale).toFixed(2));
   };
 
   // 通过px获取rem大小
@@ -76,10 +94,12 @@ class PX2REM2JS {
       if (clientWidth >= this.DESIGN_WIDTH) {
         docEl.style.fontSize = `${this.BASE_FONT_SIZE}px`;
       } else {
+        // rem * BASE_FONT_SIZE，方便使用
         docEl.style.fontSize = `${
-          this._compute(undefined) * this.BASE_FONT_SIZE
+          this._compute(undefined, true) * this.BASE_FONT_SIZE
         }px`;
       }
+      this.emit(EvenTypes.RESIZE);
     };
     //根据设计稿设置HTML字体大小
     const recalc = debounce(initFontSize, 100);

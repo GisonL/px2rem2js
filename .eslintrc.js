@@ -23,5 +23,6 @@ module.exports = {
     '@typescript-eslint/no-explicit-any': 'off',
     eqeqeq: 'error',
     '@typescript-eslint/no-inferrable-types': 'off',
+    '@typescript-eslint/ban-types': 'off',
   },
 };
