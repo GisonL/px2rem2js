@@ -17,11 +17,11 @@ export const enum EvenTypes {
 }
 
 class PX2REM2JS {
-  BASE_FONT_SIZE: number = BASE_FONT_SIZE;
-  DESIGN_WIDTH: number = DESIGN_WIDTH;
-  WINDOW_CONTEXT: any = window;
-  SUFFIX: boolean = true;
-  EVENS: { [key in EvenTypes]: Function[] } = {
+  private BASE_FONT_SIZE: number = BASE_FONT_SIZE;
+  private DESIGN_WIDTH: number = DESIGN_WIDTH;
+  private WINDOW_CONTEXT: any = window;
+  private SUFFIX: boolean = true;
+  private EVENS: { [key in EvenTypes]: Function[] } = {
     [EvenTypes.RESIZE]: [],
   };
   private UNIT = 'rem';
@@ -30,11 +30,11 @@ class PX2REM2JS {
     if (!props) return;
     if (
       props.context &&
-      Object.prototype.toString.call(props.context) === '[object Object]'
+      Object.prototype.toString.call(props.context) !== '[object Object]'
     ) {
-      this.WINDOW_CONTEXT = props.context;
+      throw new Error('The context must be a [object Object]');
     } else {
-      throw new Error("The context must be a [object Object]");
+      this.WINDOW_CONTEXT = props.context || window;
     }
     this.BASE_FONT_SIZE = props.baseFontSize || BASE_FONT_SIZE;
     this.DESIGN_WIDTH = props.designWidth || DESIGN_WIDTH;
@@ -55,11 +55,10 @@ class PX2REM2JS {
   };
 
   // compute rem
-  _compute = (
-    px: number,
-    isInit: boolean = false,
-  ): number => {
-    const scale = this.WINDOW_CONTEXT?.document?.documentElement?.clientWidth / this.DESIGN_WIDTH;
+  _compute = (px: number, isInit: boolean = false): number => {
+    const scale =
+      this.WINDOW_CONTEXT?.document?.documentElement?.clientWidth /
+      this.DESIGN_WIDTH;
     // 初始化(重新计算根元素大小)时，总是取在设计稿宽度下的基准值*比例
     let size: string | number = isInit
       ? this.BASE_FONT_SIZE + 'px'
@@ -69,10 +68,7 @@ class PX2REM2JS {
   };
 
   // 通过px获取rem大小
-  getRem = (
-    px: number | string,
-    options?: GetRemOptions,
-  ): string => {
+  getRem = (px: number | string, options?: GetRemOptions): string => {
     let unit = this.UNIT;
     if (options && !options.suffix) unit = '';
     return this._compute(Number(px)) + unit;

@@ -11,13 +11,11 @@ declare const enum EvenTypes {
     'RESIZE' = "RESIZE"
 }
 declare class PX2REM2JS {
-    BASE_FONT_SIZE: number;
-    DESIGN_WIDTH: number;
-    WINDOW_CONTEXT: any;
-    SUFFIX: boolean;
-    EVENS: {
-        [key in EvenTypes]: Function[];
-    };
+    private BASE_FONT_SIZE;
+    private DESIGN_WIDTH;
+    private WINDOW_CONTEXT;
+    private SUFFIX;
+    private EVENS;
     private UNIT;
     constructor(props?: ClassPropsType);
     on: (type: EvenTypes, cb: Function) => void;

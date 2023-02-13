@@ -609,10 +609,10 @@ var PX2REM2JS = /*#__PURE__*/_createClass(function PX2REM2JS(props) {
     }, false);
   });
   if (!props) return;
-  if (props.context && Object.prototype.toString.call(props.context) === '[object Object]') {
-    this.WINDOW_CONTEXT = props.context;
+  if (props.context && Object.prototype.toString.call(props.context) !== '[object Object]') {
+    throw new Error('The context must be a [object Object]');
   } else {
-    throw new Error("The context must be a [object Object]");
+    this.WINDOW_CONTEXT = props.context || window;
   }
   this.BASE_FONT_SIZE = props.baseFontSize || BASE_FONT_SIZE;
   this.DESIGN_WIDTH = props.designWidth || DESIGN_WIDTH;
