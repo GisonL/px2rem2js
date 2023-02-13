@@ -1,7 +1,7 @@
 {
   "name": "px2rem2js",
   "version": "1.0.0",
-  "description": "Init rem setting ,support rem transformer fuction",
+  "description": "Init global rem setting ,support transforms utils.",
   "keywords": [
     "rem",
     "mobile",
@@ -16,8 +16,8 @@
     "type": "git",
     "url": "git+https://github.com/GisonL/px2rem2js.git"
   },
-  "license": "ISC",
-  "author": "",
+  "license": "MIT",
+  "author": "GisonL",
   "main": "./dist/index.js",
   "module": "./dist/index.esm.js",
   "types": "./dist/index.esm.d.ts",
