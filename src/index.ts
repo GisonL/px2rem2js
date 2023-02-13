@@ -34,7 +34,7 @@ class PX2REM2JS {
     ) {
       this.WINDOW_CONTEXT = props.context;
     } else {
-      console.error('The context must be a [object Object]');
+      throw new Error("The context must be a [object Object]");
     }
     this.BASE_FONT_SIZE = props.baseFontSize || BASE_FONT_SIZE;
     this.DESIGN_WIDTH = props.designWidth || DESIGN_WIDTH;
@@ -56,10 +56,10 @@ class PX2REM2JS {
 
   // compute rem
   _compute = (
-    px: number | undefined = this.BASE_FONT_SIZE,
+    px: number,
     isInit: boolean = false,
   ): number => {
-    const scale = document.documentElement.clientWidth / this.DESIGN_WIDTH;
+    const scale = this.WINDOW_CONTEXT?.document?.documentElement?.clientWidth / this.DESIGN_WIDTH;
     // 初始化(重新计算根元素大小)时，总是取在设计稿宽度下的基准值*比例
     let size: string | number = isInit
       ? this.BASE_FONT_SIZE + 'px'
@@ -70,12 +70,12 @@ class PX2REM2JS {
 
   // 通过px获取rem大小
   getRem = (
-    px: number | undefined = this.BASE_FONT_SIZE,
+    px: number | string,
     options?: GetRemOptions,
   ): string => {
     let unit = this.UNIT;
     if (options && !options.suffix) unit = '';
-    return this._compute(px) + unit;
+    return this._compute(Number(px)) + unit;
   };
 
   // 初始化rem与动态适配，调用一次即可，配合postcss使用
@@ -84,7 +84,7 @@ class PX2REM2JS {
       'orientationchange' in this.WINDOW_CONTEXT
         ? 'orientationchange'
         : 'resize';
-    const docEl: HTMLElement = document.documentElement;
+    const docEl: HTMLElement = this.WINDOW_CONTEXT?.document?.documentElement;
     const initFontSize = () => {
       const clientWidth = docEl.clientWidth;
       if (!clientWidth) {
@@ -96,7 +96,7 @@ class PX2REM2JS {
       } else {
         // rem * BASE_FONT_SIZE，方便使用
         docEl.style.fontSize = `${
-          this._compute(undefined, true) * this.BASE_FONT_SIZE
+          this._compute(this.BASE_FONT_SIZE, true) * this.BASE_FONT_SIZE
         }px`;
       }
       this.emit(EvenTypes.RESIZE);

@@ -22,8 +22,8 @@ declare class PX2REM2JS {
     constructor(props?: ClassPropsType);
     on: (type: EvenTypes, cb: Function) => void;
     private emit;
-    _compute: (px?: number | undefined, isInit?: boolean) => number;
-    getRem: (px?: number | undefined, options?: GetRemOptions) => string;
+    _compute: (px: number, isInit?: boolean) => number;
+    getRem: (px: number | string, options?: GetRemOptions) => string;
     initRem: () => void;
 }
 

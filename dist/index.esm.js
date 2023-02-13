@@ -564,26 +564,24 @@ var PX2REM2JS = /*#__PURE__*/_createClass(function PX2REM2JS(props) {
       });
     }
   });
-  _defineProperty(this, "_compute", function () {
-    var px = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : _this.BASE_FONT_SIZE;
+  _defineProperty(this, "_compute", function (px) {
+    var _this$WINDOW_CONTEXT, _this$WINDOW_CONTEXT$, _this$WINDOW_CONTEXT$2;
     var isInit = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
-    var scale = document.documentElement.clientWidth / _this.DESIGN_WIDTH;
+    var scale = ((_this$WINDOW_CONTEXT = _this.WINDOW_CONTEXT) === null || _this$WINDOW_CONTEXT === void 0 ? void 0 : (_this$WINDOW_CONTEXT$ = _this$WINDOW_CONTEXT.document) === null || _this$WINDOW_CONTEXT$ === void 0 ? void 0 : (_this$WINDOW_CONTEXT$2 = _this$WINDOW_CONTEXT$.documentElement) === null || _this$WINDOW_CONTEXT$2 === void 0 ? void 0 : _this$WINDOW_CONTEXT$2.clientWidth) / _this.DESIGN_WIDTH;
     // 初始化(重新计算根元素大小)时，总是取在设计稿宽度下的基准值*比例
     var size = isInit ? _this.BASE_FONT_SIZE + 'px' : _this.BASE_FONT_SIZE * scale + 'px';
     size = Number(size.replace('px', ''));
     return Number((px / size * scale).toFixed(2));
   });
-  _defineProperty(this, "getRem", function () {
-    var px = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : _this.BASE_FONT_SIZE;
-    var options = arguments.length > 1 ? arguments[1] : undefined;
+  _defineProperty(this, "getRem", function (px, options) {
     var unit = _this.UNIT;
     if (options && !options.suffix) unit = '';
-    return _this._compute(px) + unit;
+    return _this._compute(Number(px)) + unit;
   });
   _defineProperty(this, "initRem", function () {
-    var _this$WINDOW_CONTEXT, _this$WINDOW_CONTEXT2;
+    var _this$WINDOW_CONTEXT2, _this$WINDOW_CONTEXT3, _this$WINDOW_CONTEXT4, _this$WINDOW_CONTEXT5;
     var resizeEvt = 'orientationchange' in _this.WINDOW_CONTEXT ? 'orientationchange' : 'resize';
-    var docEl = document.documentElement;
+    var docEl = (_this$WINDOW_CONTEXT2 = _this.WINDOW_CONTEXT) === null || _this$WINDOW_CONTEXT2 === void 0 ? void 0 : (_this$WINDOW_CONTEXT3 = _this$WINDOW_CONTEXT2.document) === null || _this$WINDOW_CONTEXT3 === void 0 ? void 0 : _this$WINDOW_CONTEXT3.documentElement;
     var initFontSize = function initFontSize() {
       var clientWidth = docEl.clientWidth;
       if (!clientWidth) {
@@ -594,7 +592,7 @@ var PX2REM2JS = /*#__PURE__*/_createClass(function PX2REM2JS(props) {
         docEl.style.fontSize = "".concat(_this.BASE_FONT_SIZE, "px");
       } else {
         // rem * BASE_FONT_SIZE，方便使用
-        docEl.style.fontSize = "".concat(_this._compute(undefined, true) * _this.BASE_FONT_SIZE, "px");
+        docEl.style.fontSize = "".concat(_this._compute(_this.BASE_FONT_SIZE, true) * _this.BASE_FONT_SIZE, "px");
       }
       _this.emit(EvenTypes.RESIZE);
     };
@@ -602,9 +600,9 @@ var PX2REM2JS = /*#__PURE__*/_createClass(function PX2REM2JS(props) {
     var recalc = debounce(initFontSize, 100);
     initFontSize();
     // document?.addEventListener('DOMContentLoaded', recalc, false);
-    (_this$WINDOW_CONTEXT = _this.WINDOW_CONTEXT) === null || _this$WINDOW_CONTEXT === void 0 ? void 0 : _this$WINDOW_CONTEXT.addEventListener(resizeEvt, recalc, false);
+    (_this$WINDOW_CONTEXT4 = _this.WINDOW_CONTEXT) === null || _this$WINDOW_CONTEXT4 === void 0 ? void 0 : _this$WINDOW_CONTEXT4.addEventListener(resizeEvt, recalc, false);
     //页面显示时计算一次
-    (_this$WINDOW_CONTEXT2 = _this.WINDOW_CONTEXT) === null || _this$WINDOW_CONTEXT2 === void 0 ? void 0 : _this$WINDOW_CONTEXT2.addEventListener('pageshow', function (e) {
+    (_this$WINDOW_CONTEXT5 = _this.WINDOW_CONTEXT) === null || _this$WINDOW_CONTEXT5 === void 0 ? void 0 : _this$WINDOW_CONTEXT5.addEventListener('pageshow', function (e) {
       if (e.persisted) {
         initFontSize();
       }
@@ -614,7 +612,7 @@ var PX2REM2JS = /*#__PURE__*/_createClass(function PX2REM2JS(props) {
   if (props.context && Object.prototype.toString.call(props.context) === '[object Object]') {
     this.WINDOW_CONTEXT = props.context;
   } else {
-    console.error('The context must be a [object Object]');
+    throw new Error("The context must be a [object Object]");
   }
   this.BASE_FONT_SIZE = props.baseFontSize || BASE_FONT_SIZE;
   this.DESIGN_WIDTH = props.designWidth || DESIGN_WIDTH;
