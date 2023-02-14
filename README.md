@@ -36,7 +36,7 @@ export default () => {
 }
 ```
 ## 搭配css适配
-> 使用 post-css + postcss-pxtorem插件
+> 使用 [post-css](https://github.com/postcss/postcss/blob/main/docs/README-cn.md) + [postcss-pxtorem](https://github.com/cuth/postcss-pxtorem) 插件
 
 ### 安装依赖
 npm:
