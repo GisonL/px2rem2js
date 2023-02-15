@@ -42,13 +42,13 @@ export default () => {
 npm:
 
 ```bash
-npm install post-css postcss-pxtorem -D
+npm install post-css postcss-pxtorem postcss-loader -D
 ```
 
 yarn:
 
 ```bash
-yarn add post-css postcss-pxtorem -D 
+yarn add post-css postcss-pxtorem postcss-loader -D 
 ```
 ### 配置postcss-loader
 ``` js
