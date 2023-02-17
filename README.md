@@ -20,7 +20,7 @@ yarn add px2rem2js
 ```tsx
 // src/utils/rem.ts
 import px2rem2js from 'px2rem2js';
-const p2r2js = new px2rem2js() // global default option: {designWidth:750,baseFontSize:100,suffix:true,context:window}
+const p2r2js = new px2rem2js() // global default option: {designWidth:750,baseFontSize:100,suffix:true,context:window,maxWidth:this.designWidth}
 export const initRem = p2r2js.initRem
 export const getRem = p2r2js.getRem // current default option: {suffix:global.default.option.suffix}
 export default p2r2js
@@ -100,6 +100,8 @@ yarn add post-css postcss-pxtorem postcss-loader -D
 | baseFontSize | root font-size 基准值 | number  | 100    | 提高可阅读性，扩大小数点精准度度                   |
 | suffix       | 输出值是否带有rem     | boolean | true   | 某些场景可能希望只输出值，不带单位                 |
 | context      | 上下文                | any     | window | 允许配置应用于addEventListener和document的取值对象 |
+|              |
+| maxWidth      | 支持适配的最大宽度     | number\|string\|false  | designWidth | 为false时没有最大宽度适配限制，font-size将保持修改。配置值时，当达到或超出该值时，font-size不再修改。场景如超过设计稿宽度的设备，比如ipad等，大屏下用户不一定就想看到那么大的效果，因此支持配置最大值。 |
 |              |
 - 初始化：`p2r2js.initRem()`
 - 注册事件：`p2r2js.on(<EvenTypes[string]>,callback)`，注册事件
