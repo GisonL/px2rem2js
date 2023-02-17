@@ -5,8 +5,10 @@ const render = ()=>{
     const oldRoot = document.getElementById('root')
     if(oldRoot) oldRoot.parentNode.removeChild(oldRoot)
     const remEle = `
-    <p style="font-size:${p2r2js.getRem(100)}">Hello World!!(100px in 750 design = ${p2r2js.getRem(100)})</p>
-    <p style="font-size:${p2r2js.getRem(50,{suffix:false})}rem">no rem suffix!!(50px in 750 design = ${p2r2js.getRem(50)})<p>
+    <p>100px width in 750 design = ${p2r2js.getRem(100)}：</p>
+    <div style="width:${p2r2js.getRem(100)};height:${p2r2js.getRem(100)};background-color:red"></div>
+    <p>50px width in 750 design = ${p2r2js.getRem(50)}(no rem suffix!!)：</p>
+    <div style="width:${p2r2js.getRem(50,{suffix:false})}rem;height:${p2r2js.getRem(50,{suffix:false})}rem;background-color:blue"><div>
     `
     const dom = document.createElement('div')
     dom.id='root'

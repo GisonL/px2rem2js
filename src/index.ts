@@ -6,6 +6,7 @@ interface ClassPropsType {
   designWidth?: number;
   context?: any;
   suffix?: boolean;
+  maxWidth?: number | string | false;
 }
 
 interface GetRemOptions {
@@ -21,6 +22,7 @@ class PX2REM2JS {
   private DESIGN_WIDTH: number = DESIGN_WIDTH;
   private WINDOW_CONTEXT: any = window;
   private SUFFIX: boolean = true;
+  private MAX_WIDTH: number | false = DESIGN_WIDTH;
   private EVENS: { [key in EvenTypes]: Function[] } = {
     [EvenTypes.RESIZE]: [],
   };
@@ -38,6 +40,13 @@ class PX2REM2JS {
     }
     this.BASE_FONT_SIZE = props.baseFontSize || BASE_FONT_SIZE;
     this.DESIGN_WIDTH = props.designWidth || DESIGN_WIDTH;
+    if (props.maxWidth === false) {
+      this.MAX_WIDTH = false;
+    } else {
+      this.MAX_WIDTH = props.maxWidth
+        ? Number(String(props.maxWidth).match(/[0-9]+/)[0] || this.DESIGN_WIDTH)
+        : this.DESIGN_WIDTH;
+    }
     this.SUFFIX = props.suffix || true;
     if (!!this.SUFFIX) this.UNIT = '';
   }
@@ -86,8 +95,7 @@ class PX2REM2JS {
       if (!clientWidth) {
         return;
       }
-      // docEl.style.fontSize = `${BASE_FONT_SIZE * (clientWidth / DESIGN_WIDTH)}px`;
-      if (clientWidth >= this.DESIGN_WIDTH) {
+      if (this.MAX_WIDTH === false ? false : clientWidth >= this.DESIGN_WIDTH) {
         docEl.style.fontSize = `${this.BASE_FONT_SIZE}px`;
       } else {
         // rem * BASE_FONT_SIZE，方便使用

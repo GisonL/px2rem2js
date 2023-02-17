@@ -552,6 +552,7 @@ var PX2REM2JS = /*#__PURE__*/_createClass(function PX2REM2JS(props) {
   _defineProperty(this, "DESIGN_WIDTH", DESIGN_WIDTH);
   _defineProperty(this, "WINDOW_CONTEXT", window);
   _defineProperty(this, "SUFFIX", true);
+  _defineProperty(this, "MAX_WIDTH", DESIGN_WIDTH);
   _defineProperty(this, "EVENS", _defineProperty({}, EvenTypes.RESIZE, []));
   _defineProperty(this, "UNIT", 'rem');
   _defineProperty(this, "on", function (type, cb) {
@@ -587,8 +588,7 @@ var PX2REM2JS = /*#__PURE__*/_createClass(function PX2REM2JS(props) {
       if (!clientWidth) {
         return;
       }
-      // docEl.style.fontSize = `${BASE_FONT_SIZE * (clientWidth / DESIGN_WIDTH)}px`;
-      if (clientWidth >= _this.DESIGN_WIDTH) {
+      if (_this.MAX_WIDTH === false ? false : clientWidth >= _this.DESIGN_WIDTH) {
         docEl.style.fontSize = "".concat(_this.BASE_FONT_SIZE, "px");
       } else {
         // rem * BASE_FONT_SIZE，方便使用
@@ -616,6 +616,11 @@ var PX2REM2JS = /*#__PURE__*/_createClass(function PX2REM2JS(props) {
   }
   this.BASE_FONT_SIZE = props.baseFontSize || BASE_FONT_SIZE;
   this.DESIGN_WIDTH = props.designWidth || DESIGN_WIDTH;
+  if (props.maxWidth === false) {
+    this.MAX_WIDTH = false;
+  } else {
+    this.MAX_WIDTH = props.maxWidth ? Number(String(props.maxWidth).match(/[0-9]+/)[0] || this.DESIGN_WIDTH) : this.DESIGN_WIDTH;
+  }
   this.SUFFIX = props.suffix || true;
   if (!!this.SUFFIX) this.UNIT = '';
 });
