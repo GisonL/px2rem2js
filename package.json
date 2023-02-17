@@ -1,6 +1,6 @@
 {
   "name": "px2rem2js",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "Init global rem setting ,support transforms utils.",
   "keywords": [
     "rem",
