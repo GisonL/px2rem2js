@@ -3,6 +3,7 @@ interface ClassPropsType {
     designWidth?: number;
     context?: any;
     suffix?: boolean;
+    maxWidth?: number | string | false;
 }
 interface GetRemOptions {
     suffix?: boolean;
@@ -15,6 +16,7 @@ declare class PX2REM2JS {
     private DESIGN_WIDTH;
     private WINDOW_CONTEXT;
     private SUFFIX;
+    private MAX_WIDTH;
     private EVENS;
     private UNIT;
     constructor(props?: ClassPropsType);
