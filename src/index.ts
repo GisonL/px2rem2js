@@ -95,7 +95,7 @@ class PX2REM2JS {
       if (!clientWidth) {
         return;
       }
-      if (this.MAX_WIDTH === false ? false : clientWidth >= this.MAX_WIDTH) {
+      if (this.MAX_WIDTH === false ? false : clientWidth > this.MAX_WIDTH) {
         docEl.style.fontSize = `${this.BASE_FONT_SIZE}px`;
       } else {
         // rem * BASE_FONT_SIZE，方便使用
