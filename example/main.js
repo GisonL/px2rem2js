@@ -1,5 +1,5 @@
 import px2rem2js,{EvenTypes} from './index.esm.js'
-const p2r2js = new px2rem2js()
+const p2r2js = new px2rem2js({designWidth:375,maxWidth:750})
 p2r2js.initRem()
 const render = ()=>{
     const oldRoot = document.getElementById('root')

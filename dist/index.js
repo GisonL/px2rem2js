@@ -595,7 +595,7 @@
           return;
         }
         if (_this.MAX_WIDTH === false ? false : clientWidth > _this.MAX_WIDTH) {
-          docEl.style.fontSize = "".concat(_this.BASE_FONT_SIZE, "px");
+          docEl.style.fontSize = "".concat(_this.MAX_WIDTH / _this.DESIGN_WIDTH * _this.BASE_FONT_SIZE, "px");
         } else {
           // rem * BASE_FONT_SIZE，方便使用
           docEl.style.fontSize = "".concat(_this._compute(_this.BASE_FONT_SIZE, true) * _this.BASE_FONT_SIZE, "px");
